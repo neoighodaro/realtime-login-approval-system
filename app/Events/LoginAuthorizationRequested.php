@@ -15,6 +15,11 @@ class LoginAuthorizationRequested implements ShouldBroadcast
     /**
      * @var string
      */
+    public $hash;
+
+    /**
+     * @var string
+     */
     public $hashKey;
 
     /**
@@ -22,8 +27,10 @@ class LoginAuthorizationRequested implements ShouldBroadcast
      *
      * @return void
      */
-    public function __construct(string $hashKey)
+    public function __construct(string $hashKey, string $hash)
     {
+        $this->hash = $hash;
+
         $this->hashKey = $hashKey;
     }
 
