@@ -40,7 +40,7 @@ class SendLoginAuthorization implements ShouldQueue
         ];
 
         // Interest: auth-janedoe-at-pushercom
-        $interests = ['auth-' . str_slug(auth()->user()->email)];
+        $interests = ['auth-' . str_slug($event->email)];
 
         $this->beams->publishToInterests($interests, [
             'fcm' => ['notification' => $payload],

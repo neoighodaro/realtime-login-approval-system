@@ -52,13 +52,14 @@ class LoginController extends Controller
         }
 
         if ($this->guard()->validate($this->credentials($request))) {
-            $hashKey = sha1($request->get($this->username()) . '_' . Str::random(32));
+            $username = $request->get($this->username());
+            $hashKey = sha1($username . '_' . Str::random(32));
             $unhashedLoginHash = $hashKey . '.' . Str::random(32);
 
             // Store the hash for 5 minutes...
             cache()->put("{$hashKey}_login_hash", Hash::make($unhashedLoginHash), now()->addMinutes(5));
 
-            event(new LoginAuthorizationRequested($unhashedLoginHash));
+            event(new LoginAuthorizationRequested($unhashedLoginHash, $username));
 
             return ['status' => true];
         }
