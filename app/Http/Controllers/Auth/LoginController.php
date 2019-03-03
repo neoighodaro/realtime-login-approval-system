@@ -58,7 +58,7 @@ class LoginController extends Controller
             // Store the hash for 5 minutes...
             cache()->put("{$hashKey}_login_hash", Hash::make($unhashedLoginHash), now()->addMinutes(5));
 
-            event(new LoginAuthorizationRequested($hashKey, $unhashedLoginHash));
+            event(new LoginAuthorizationRequested($unhashedLoginHash));
 
             return ['status' => true];
         }

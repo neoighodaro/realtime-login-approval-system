@@ -113,7 +113,7 @@
 
                     showApprovalView();
                 })
-                .catch(() => alert('Invalid login credentials'));
+                .catch(() => alert('Invalid login credentials!'));
         })
     })
     </script>

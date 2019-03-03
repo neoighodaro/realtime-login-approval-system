@@ -18,20 +18,13 @@ class LoginAuthorizationRequested implements ShouldBroadcast
     public $hash;
 
     /**
-     * @var string
-     */
-    public $hashKey;
-
-    /**
      * Create a new event instance.
      *
      * @return void
      */
-    public function __construct(string $hashKey, string $hash)
+    public function __construct(string $hash)
     {
         $this->hash = $hash;
-
-        $this->hashKey = $hashKey;
     }
 
     /**
