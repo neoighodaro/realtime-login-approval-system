@@ -17,15 +17,14 @@
         <div id="content">
             @include('partials.topbar')
             @yield('content')
-        </div>
-
-        <footer class="sticky-footer bg-white">
-            <div class="container my-auto">
-                <div class="copyright text-center my-auto">
-                    <span>Copyright &copy; {{ config('app.name') }} {{ date('Y') }}</span>
+            <footer class="sticky-footer bg-white">
+                <div class="container my-auto">
+                    <div class="copyright text-center my-auto">
+                        <span>Copyright &copy; {{ config('app.name') }} {{ date('Y') }}</span>
+                    </div>
                 </div>
-            </div>
-        </footer>
+            </footer>
+        </div>
     </div>
 
     <a class="scroll-to-top rounded" href="#page-top">
