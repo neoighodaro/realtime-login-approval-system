@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Auth;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use App\Http\Controllers\Controller;
+use App\Events\LoginAuthorizationRequested;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
 
 class LoginController extends Controller
@@ -55,6 +56,8 @@ class LoginController extends Controller
 
             // Store the hash for 5 minutes...
             cache()->put("{$hashKey}_login_hash", $loginHash, now()->addMinutes(5));
+
+            event(new LoginAuthorizationRequested($hashKey));
 
             return ['status' => true];
         }
