@@ -3,6 +3,7 @@
 namespace App\Providers;
 
 use Illuminate\Support\ServiceProvider;
+use Pusher\PushNotifications\PushNotifications;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -13,7 +14,14 @@ class AppServiceProvider extends ServiceProvider
      */
     public function register()
     {
-        //
+        $this->app->bind(PushNotifications::class, function () {
+            $config = config('broadcasting.connections.pusher.beams');
+
+            return PushNotifications([
+                'secretKey' => $config['secret_key'] ?? '',
+                'instanceId' => $config['instance_id'] ?? '',
+            ]);
+        });
     }
 
     /**
@@ -23,6 +31,5 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-        //
     }
 }
