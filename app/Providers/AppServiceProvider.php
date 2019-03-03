@@ -17,7 +17,7 @@ class AppServiceProvider extends ServiceProvider
         $this->app->bind(PushNotifications::class, function () {
             $config = config('broadcasting.connections.pusher.beams');
 
-            return PushNotifications([
+            return new PushNotifications([
                 'secretKey' => $config['secret_key'] ?? '',
                 'instanceId' => $config['instance_id'] ?? '',
             ]);

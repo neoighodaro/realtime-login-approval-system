@@ -81,7 +81,7 @@ class LoginController extends Controller
         $storedHash = cache()->get($hashKey . '_login_hash');
 
         if (!Hash::check($sentHash, $storedHash) || !$this->attemptLogin($request)) {
-            $this->abort(422);
+            abort(422);
         }
 
         return ['status' => true];
