@@ -56,7 +56,7 @@ class LoginController extends Controller
             // Store the hash for 5 minutes...
             cache()->put("{$hashKey}_login_hash", $loginHash, now()->addMinutes(5));
 
-            return ['status' => true, 'hash' => $hashKey];
+            return ['status' => true];
         }
 
         $this->incrementLoginAttempts($request);
