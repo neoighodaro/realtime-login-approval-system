@@ -88,7 +88,7 @@
     <script src="{{ asset('js/sb-admin-2.min.js') }}"></script>
 
     <script type="text/javascript">
-    const showApprovalView = () => {
+    const showApprovalAndListenForApproval = callback => {
         $('#loginFormWrapper').addClass('d-none');
         $('#loginApprovalQueue').removeClass('d-none');
     };
