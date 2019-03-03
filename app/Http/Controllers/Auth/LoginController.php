@@ -51,7 +51,7 @@ class LoginController extends Controller
         }
 
         if ($this->guard()->validate($this->credentials($request))) {
-            $hashKey = sha1($request->get($this->username()));
+            $hashKey = sha1($request->get($this->username()) . '_' . str_random(32));
             $loginHash = Hash::make($hashKey . '_' . str_random(32));
 
             // Store the hash for 5 minutes...
