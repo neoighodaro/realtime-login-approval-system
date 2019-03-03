@@ -91,6 +91,8 @@
     const showApprovalAndListenForApproval = callback => {
         $('#loginFormWrapper').addClass('d-none');
         $('#loginApprovalQueue').removeClass('d-none');
+
+        Echo.channel('auth-request').listen('.approval-granted', e => callback(e.hash));
     };
 
     const getLoginCredentials = () => {
@@ -105,13 +107,15 @@
         $('#authenticationForm').on('submit', e => {
             e.preventDefault();
 
-            axios.post('/login/confirm', getLoginCredentials())
-                .then(({ data }) => {
-                    if ( ! data.status) {
-                        return alert("Invalid login credentials.");
-                    }
+            const { email, password, remember } = getLoginCredentials();
 
-                    showApprovalView();
+            axios.post('/login/confirm', {email, password, remember })
+                .then(() => {
+                    showApprovalAndListenForApproval(hash => {
+                        axios.post('/login/authorize', { email, password, remember, hash })
+                            .then(() => (window.location = '/home'))
+                            .catch(() => alert('Invalid authorization. Please try again.'));
+                    });
                 })
                 .catch(() => alert('Invalid login credentials!'));
         })

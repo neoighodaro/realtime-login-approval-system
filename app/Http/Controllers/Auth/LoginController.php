@@ -68,4 +68,22 @@ class LoginController extends Controller
         return $this->sendFailedLoginResponse($request);
     }
 
+    public function authorizeLogin(Request $request)
+    {
+        $request->validate([
+            'hash' => 'required|string',
+            'password' => 'required|string',
+            $this->username() => 'required|string',
+        ]);
+
+        $sentHash = $request->get('hash');
+        [$hashKey] = explode('.', $sentHash);
+        $storedHash = cache()->get($hashKey . '_login_hash');
+
+        if (!Hash::check($sentHash, $storedHash) || !$this->attemptLogin($request)) {
+            $this->abort(422);
+        }
+
+        return ['status' => true];
+    }
 }

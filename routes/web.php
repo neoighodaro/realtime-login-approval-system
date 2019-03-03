@@ -13,6 +13,7 @@
 
 Route::redirect('/', '/home');
 Route::post('/login/confirm', 'Auth\LoginController@confirmLogin');
+Route::post('/login/authorize', 'Auth\LoginController@authorizeLogin');
 
 Auth::routes();
 
