@@ -12,6 +12,7 @@
 */
 
 Route::redirect('/', '/home');
+Route::post('/login/confirm', 'Auth\LoginController@confirmLogin');
 
 Auth::routes();
 

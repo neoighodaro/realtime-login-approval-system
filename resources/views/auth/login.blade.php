@@ -22,11 +22,24 @@
                                 <img src="https://source.unsplash.com/K4mSJ7kc0As/464x577">
                             </div>
                             <div class="col-lg-6">
-                                <div class="p-5">
+                                <div class="p-5 d-none" id="loginApprovalQueue">
+                                    <div class="w-50 my-5 mx-auto mobilePhone">
+                                        <img src="{{ asset('img/approval-mobile.svg') }}" class="w-100">
+                                    </div>
+                                    <h5 class="text-center text-primary">We sent an approval request to your registered devices</h5>
+                                    <small class="d-block text-secondary text-center">
+                                        To log in, open the dashboard app on one of your registered devices and approve the login request.
+                                    </small>
+                                    <div class="text-center mt-3">
+                                        <img src="{{ asset('/img/spinner.svg') }}" alt="">
+                                    </div>
+                                </div>
+
+                                <div class="p-5" id="loginFormWrapper">
                                     <div class="text-center">
                                         <h1 class="h4 text-gray-900 mb-4">Log in</h1>
                                     </div>
-                                    <form method="POST" action="{{ route('login') }}" class="user">
+                                    <form method="POST" action="{{ route('login') }}" class="user" id="authenticationForm">
                                         @csrf
                                         <div class="form-group">
                                             <input type="email" class="form-control form-control-user" id="email" aria-describedby="emailHelp" placeholder="Email Address" name="email" value="{{ old('email') }}" required autofocus>
@@ -73,5 +86,36 @@
     <script src="{{ asset('vendor/bootstrap/js/bootstrap.bundle.min.js') }}"></script>
     <script src="{{ asset('vendor/jquery-easing/jquery.easing.min.js') }}"></script>
     <script src="{{ asset('js/sb-admin-2.min.js') }}"></script>
+
+    <script type="text/javascript">
+    const showApprovalView = () => {
+        $('#loginFormWrapper').addClass('d-none');
+        $('#loginApprovalQueue').removeClass('d-none');
+    };
+
+    const getLoginCredentials = () => {
+        return {
+            email: $('#email').val(),
+            password: $('#password').val(),
+            remember: $('#remember').val()
+        }
+    };
+
+    $(document).ready(() => {
+        $('#authenticationForm').on('submit', e => {
+            e.preventDefault();
+
+            axios.post('/login/confirm', getLoginCredentials())
+                .then(({ data }) => {
+                    if ( ! data.status) {
+                        return alert("Invalid login credentials.");
+                    }
+
+                    showApprovalView();
+                })
+                .catch(() => alert('Oops! something went wrong'));
+        })
+    })
+    </script>
 </body>
 </html>
