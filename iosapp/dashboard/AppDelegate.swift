@@ -50,8 +50,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
         let status = (response.actionIdentifier == "approve") ? "approved" : "denied"
         let userInfo = response.notification.request.content.userInfo
         
-        debugPrint(userInfo)
-        
         if let aps = userInfo["aps"] as? [String: AnyObject], let deets = aps["alert"] as? [String: String] {
             if let hash = deets["hash"] {
                 NotificationCenter.default.post(name: name, object: nil, userInfo: ["status": status, "hash": hash])
