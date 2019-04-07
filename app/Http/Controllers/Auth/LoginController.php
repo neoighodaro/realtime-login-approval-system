@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Auth;
 
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
+use App\Events\LoginAuthorized;
 use Illuminate\Support\Facades\Hash;
 use App\Http\Controllers\Controller;
 use App\Events\LoginAuthorizationRequested;
@@ -41,6 +42,10 @@ class LoginController extends Controller
         $this->middleware('guest')->except('logout');
     }
 
+    /**
+     * @param Request $request
+     * @return void
+     */
     public function confirmLogin(Request $request)
     {
         $this->validateLogin($request);
@@ -69,6 +74,31 @@ class LoginController extends Controller
         return $this->sendFailedLoginResponse($request);
     }
 
+    /**
+     * @param Request $request
+     * @return void
+     */
+    public function clientAuthorized(Request $request)
+    {
+        $request->validate(['hash' => 'required|string']);
+
+        $sentHash = $request->get('hash');
+        [$hashKey] = explode('.', $sentHash);
+        $storedHash = cache()->get($hashKey . '_login_hash');
+
+        if (!Hash::check($sentHash, $storedHash)) {
+            abort(422);
+        }
+
+        event(new LoginAuthorized($sentHash));
+
+        return ['status' => true];
+    }
+
+    /**
+     * @param Request $request
+     * @return void
+     */
     public function authorizeLogin(Request $request)
     {
         $request->validate([

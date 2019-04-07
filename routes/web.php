@@ -14,6 +14,7 @@
 Route::redirect('/', '/home');
 Route::post('/login/confirm', 'Auth\LoginController@confirmLogin');
 Route::post('/login/authorize', 'Auth\LoginController@authorizeLogin');
+Route::post('/login/client-authorized', 'Auth\LoginController@clientAuthorized');
 
 Auth::routes();
 

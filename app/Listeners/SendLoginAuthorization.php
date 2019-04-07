@@ -35,6 +35,7 @@ class SendLoginAuthorization implements ShouldQueue
     public function handle(LoginAuthorizationRequested $event)
     {
         $payload = [
+            'hash' => $event->hash,
             'title' => 'Dashboard',
             'message' => 'Dashboard just sent a new approval request',
         ];
@@ -46,7 +47,7 @@ class SendLoginAuthorization implements ShouldQueue
             'fcm' => ['notification' => $payload],
             'apns' => [
                 'aps' => ['alert' => $payload],
-                'category' => 'USER_AUTHORIZATION',
+                'category' => 'LoginActions',
             ],
         ]);
     }

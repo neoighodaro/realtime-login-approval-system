@@ -8,6 +8,7 @@ use Illuminate\Auth\Listeners\SendEmailVerificationNotification;
 use Illuminate\Foundation\Support\Providers\EventServiceProvider as ServiceProvider;
 use App\Events\LoginAuthorizationRequested;
 use App\Listeners\SendLoginAuthorization;
+use App\Events\LoginAuthorized;
 
 class EventServiceProvider extends ServiceProvider
 {
@@ -22,6 +23,9 @@ class EventServiceProvider extends ServiceProvider
         ],
         LoginAuthorizationRequested::class => [
             SendLoginAuthorization::class,
+        ],
+        LoginAuthorized::class => [
+            // Add listeners here
         ],
     ];
 
