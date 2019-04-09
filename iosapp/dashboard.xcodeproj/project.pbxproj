@@ -28,6 +28,7 @@
 		B51D02422258C41A00DEB1C9 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		B51D02482258E07E00DEB1C9 /* ApprovalViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ApprovalViewController.swift; sourceTree = "<group>"; };
 		B554C8AD2259D2F9006D976C /* AppConstants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppConstants.swift; sourceTree = "<group>"; };
+		B56FE074225D314B009696E8 /* dashboard.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = dashboard.entitlements; sourceTree = "<group>"; };
 		CB8AFF0EA53374A39FC7ACD2 /* Pods-dashboard.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-dashboard.debug.xcconfig"; path = "Pods/Target Support Files/Pods-dashboard/Pods-dashboard.debug.xcconfig"; sourceTree = "<group>"; };
 		E3E18898F251B60925EF5EFD /* Pods-dashboard.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-dashboard.release.xcconfig"; path = "Pods/Target Support Files/Pods-dashboard/Pods-dashboard.release.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -74,6 +75,7 @@
 		B51D02352258C41900DEB1C9 /* dashboard */ = {
 			isa = PBXGroup;
 			children = (
+				B56FE074225D314B009696E8 /* dashboard.entitlements */,
 				B51D02362258C41900DEB1C9 /* AppDelegate.swift */,
 				B51D02382258C41900DEB1C9 /* ViewController.swift */,
 				B51D023A2258C41900DEB1C9 /* Main.storyboard */,
@@ -128,6 +130,11 @@
 				TargetAttributes = {
 					B51D02322258C41900DEB1C9 = {
 						CreatedOnToolsVersion = 10.2;
+						SystemCapabilities = {
+							com.apple.Push = {
+								enabled = 1;
+							};
+						};
 					};
 				};
 			};
@@ -368,9 +375,11 @@
 			baseConfigurationReference = CB8AFF0EA53374A39FC7ACD2 /* Pods-dashboard.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_ENTITLEMENTS = dashboard/dashboard.entitlements;
 				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = FMQ6R58UAV;
+				DEVELOPMENT_TEAM = 8832U97EJ9;
 				INFOPLIST_FILE = dashboard/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -387,9 +396,11 @@
 			baseConfigurationReference = E3E18898F251B60925EF5EFD /* Pods-dashboard.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_ENTITLEMENTS = dashboard/dashboard.entitlements;
 				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = FMQ6R58UAV;
+				DEVELOPMENT_TEAM = 8832U97EJ9;
 				INFOPLIST_FILE = dashboard/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",

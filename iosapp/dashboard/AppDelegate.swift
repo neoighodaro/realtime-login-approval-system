@@ -18,7 +18,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         
-        pushNotifications.start(instanceId: AppConstants.PUSHER_INSTANCE_ID)
+        pushNotifications.start(instanceId: AppConstants.PUSHER_BEAMS_INSTANCE_ID)
         pushNotifications.registerForRemoteNotifications()
         
         let center = UNUserNotificationCenter.current()
