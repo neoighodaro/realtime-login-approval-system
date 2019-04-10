@@ -7,7 +7,6 @@
 //
 
 import UIKit
-import Alamofire
 import PushNotifications
 import UserNotifications
 
@@ -16,7 +15,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
 
     var window: UIWindow?
     let pushNotifications = PushNotifications.shared
-    var backgroundTaskID: UIBackgroundTaskIdentifier?
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         
@@ -56,31 +54,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
         if let aps = userInfo["aps"] as? [String: AnyObject], let payload = aps["payload"] as? [String: String] {
             if status == "approved" {
                 NotificationCenter.default.post(name: name, object: nil, userInfo: ["status": status, "payload": payload])
-//                sendDataToServer(AppConstants.API_URL + "/login/client-authorized", payload: payload)
             }
         }
         
         completionHandler()
-    }
-    
-    func sendDataToServer(_ url: String, payload: [String: String]) {
-        DispatchQueue.global().async {
-            self.backgroundTaskID = UIApplication.shared.beginBackgroundTask(withName: "Finish Network Tasks") {
-                UIApplication.shared.endBackgroundTask(self.backgroundTaskID!)
-                self.backgroundTaskID = UIBackgroundTaskIdentifier.invalid
-            }
-            
-            // Send the data synchronously.
-            Alamofire.request(url, method: .post, parameters: payload)
-                .validate()
-                .responseJSON { response in
-                    debugPrint(response.result)
-                }
-            
-            // End the task assertion.
-            UIApplication.shared.endBackgroundTask(self.backgroundTaskID!)
-            self.backgroundTaskID = UIBackgroundTaskIdentifier.invalid
-        }
     }
 }
 
