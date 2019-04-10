@@ -51,17 +51,16 @@ class ViewController: UIViewController {
     }
     
     @objc private func changeStatusFromPushNotification(notification: Notification) {
-        guard let data = notification.userInfo as? [String: String] else { return }
-        guard let status = data["status"], let hash = data["hash"], let email = data["email"] else { return }
+        guard let data = notification.userInfo as? [String: Any] else { return }
+        guard let status = data["status"] as? String else { return }
+        guard let payload = data["payload"] as? [String: String] else { return }
         
         if status == "approved" {
             let url = AppConstants.API_URL + "/login/client-authorized"
             
-            Alamofire.request(url, method: .post, parameters: ["email": email, "hash": hash])
+            Alamofire.request(url, method: .post, parameters: payload)
                 .validate()
-                .responseJSON { response in
-                    // Do stuff
-                }
+                .responseJSON { response in self.dismiss(animated: true) }
         }
     }
 

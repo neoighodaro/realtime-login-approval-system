@@ -35,19 +35,20 @@ class SendLoginAuthorization implements ShouldQueue
     public function handle(LoginAuthorizationRequested $event)
     {
         $payload = [
-            'hash' => $event->hash,
             'title' => 'Dashboard',
-            'message' => 'Dashboard just sent a new approval request',
+            'body' => 'Dashboard just sent a new approval request',
         ];
 
         // Interest: auth-janedoe-at-pushercom
         $interests = ['auth-' . str_slug($event->email)];
 
         $this->beams->publishToInterests($interests, [
-            'fcm' => ['notification' => $payload],
             'apns' => [
-                'aps' => ['alert' => $payload],
-                'category' => 'LoginActions',
+                'aps' => [
+                    'alert' => $payload,
+                    'category' => 'LoginActions',
+                    'payload' => ['hash' => $event->hash, 'email' => $event->email],
+                ],
             ],
         ]);
     }

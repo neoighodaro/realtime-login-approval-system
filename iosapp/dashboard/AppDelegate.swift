@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import Alamofire
 import PushNotifications
 import UserNotifications
 
@@ -15,6 +16,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
 
     var window: UIWindow?
     let pushNotifications = PushNotifications.shared
+    var backgroundTaskID: UIBackgroundTaskIdentifier?
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         
@@ -24,8 +26,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
         let center = UNUserNotificationCenter.current()
         center.delegate = self
 
-        let deny    = UNNotificationAction(identifier: "deny", title: "Deny", options: [.foreground])
-        let approve = UNNotificationAction(identifier: "approve", title: "Approve", options: [.foreground])
+        let deny    = UNNotificationAction(identifier: "deny", title: "Deny", options: [.destructive])
+        let approve = UNNotificationAction(identifier: "approve", title: "Approve", options: [.foreground, .authenticationRequired])
         
         center.setNotificationCategories([
             UNNotificationCategory(identifier: "LoginActions", actions: [approve, deny], intentIdentifiers: [])
@@ -43,6 +45,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
     
     func application(_ application: UIApplication, didReceiveRemoteNotification userInfo: [AnyHashable: Any], fetchCompletionHandler completionHandler: @escaping (UIBackgroundFetchResult) -> Void) {
         pushNotifications.handleNotification(userInfo: userInfo)
+        completionHandler(.newData)
     }
     
     func userNotificationCenter(_ center: UNUserNotificationCenter, didReceive response: UNNotificationResponse, withCompletionHandler completionHandler: @escaping () -> Void) {
@@ -50,13 +53,34 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
         let status = (response.actionIdentifier == "approve") ? "approved" : "denied"
         let userInfo = response.notification.request.content.userInfo
         
-        if let aps = userInfo["aps"] as? [String: AnyObject], let deets = aps["alert"] as? [String: String] {
-            if let hash = deets["hash"] {
-                NotificationCenter.default.post(name: name, object: nil, userInfo: ["status": status, "hash": hash])
+        if let aps = userInfo["aps"] as? [String: AnyObject], let payload = aps["payload"] as? [String: String] {
+            if status == "approved" {
+                NotificationCenter.default.post(name: name, object: nil, userInfo: ["status": status, "payload": payload])
+//                sendDataToServer(AppConstants.API_URL + "/login/client-authorized", payload: payload)
             }
         }
         
         completionHandler()
+    }
+    
+    func sendDataToServer(_ url: String, payload: [String: String]) {
+        DispatchQueue.global().async {
+            self.backgroundTaskID = UIApplication.shared.beginBackgroundTask(withName: "Finish Network Tasks") {
+                UIApplication.shared.endBackgroundTask(self.backgroundTaskID!)
+                self.backgroundTaskID = UIBackgroundTaskIdentifier.invalid
+            }
+            
+            // Send the data synchronously.
+            Alamofire.request(url, method: .post, parameters: payload)
+                .validate()
+                .responseJSON { response in
+                    debugPrint(response.result)
+                }
+            
+            // End the task assertion.
+            UIApplication.shared.endBackgroundTask(self.backgroundTaskID!)
+            self.backgroundTaskID = UIBackgroundTaskIdentifier.invalid
+        }
     }
 }
 

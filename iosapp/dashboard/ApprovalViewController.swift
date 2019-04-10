@@ -18,6 +18,14 @@ class ApprovalViewController: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        // push notification
+        NotificationCenter.default.addObserver(
+            self,
+            selector: #selector(changeStatusFromPushNotification),
+            name: Notification.Name("status"),
+            object: nil
+        )
     }
     
     override func viewDidAppear(_ animated: Bool) {
@@ -25,6 +33,19 @@ class ApprovalViewController: UIViewController {
         
         if payload?["hash"] == nil || payload?["email"] == nil {
             return denyButtonWasPressed(nil)
+        }
+    }
+    
+    @objc private func changeStatusFromPushNotification(notification: Notification) {
+        guard let data = notification.userInfo as? [String: Any] else { return }
+        guard let status = data["status"] as? String else { return }
+        guard let payload = data["payload"] as? [String: String] else { return }
+        
+        if status == "approved" {
+            self.payload = payload
+            self.approveButtonWasPressed(nil)
+        } else {
+            self.denyButtonWasPressed(self)
         }
     }
     
