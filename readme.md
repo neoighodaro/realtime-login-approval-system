@@ -1,6 +1,13 @@
 # Login Approval System with Pusher Channels and Pusher Beams
 
-How to build a login approval system using Pusher Channels and Pusher Beams
+How to build a login approval system using Pusher Channels and Pusher Beams.
+
+Tutorial Links:
+
+https://pusher.com/tutorials/login-approval-laravel-ios-part-1
+https://pusher.com/tutorials/login-approval-laravel-ios-part-2
+https://pusher.com/tutorials/login-approval-laravel-ios-part-3
+
 
 ## Getting Started
 
